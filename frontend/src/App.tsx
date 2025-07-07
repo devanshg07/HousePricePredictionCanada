@@ -1,47 +1,38 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Select from 'react-select';
+import { FaCity, FaBed, FaBath } from 'react-icons/fa';
 import './App.css';
 
 interface Listing {
   City: string;
   Price: number;
-  Address?: string;
   Number_Beds: number;
   Number_Baths: number;
-  Province?: string;
-  Population?: number;
-  Latitude?: number;
-  Longitude?: number;
-  Median_Family_Income?: number;
   Predicted_Price?: number;
 }
 
-const cityOptions = [
-  { value: "Toronto", label: "Toronto" },
-  { value: "Winnipeg", label: "Winnipeg" },
-  { value: "Vancouver", label: "Vancouver" },
-  { value: "Calgary", label: "Calgary" },
-  { value: "Edmonton", label: "Edmonton" },
-  { value: "Ottawa", label: "Ottawa" },
-  { value: "Montreal", label: "Montreal" },
-  { value: "Halifax", label: "Halifax" },
-  { value: "Victoria", label: "Victoria" },
-  { value: "Saskatoon", label: "Saskatoon" },
-  { value: "Regina", label: "Regina" },
-  { value: "Quebec", label: "Quebec" },
-  { value: "Hamilton", label: "Hamilton" },
-  { value: "London", label: "London" },
-  { value: "Kitchener", label: "Kitchener" },
-  { value: "Windsor", label: "Windsor" },
-  // ...add more cities as needed
-];
-
 function App() {
   const [city, setCity] = useState<{ value: string; label: string } | null>(null);
-  const [bedrooms, setBedrooms] = useState(1);
-  const [bathrooms, setBathrooms] = useState(1);
+  const [cityOptions, setCityOptions] = useState<{ value: string; label: string }[]>([]);
+  const [bedrooms, setBedrooms] = useState<string>('1');
+  const [bathrooms, setBathrooms] = useState<string>('1');
   const [results, setResults] = useState<Listing[]>([]);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    fetch('http://localhost:8000/api/cities')
+      .then(res => res.json())
+      .then(data => {
+        setCityOptions(data.cities.map((c: string) => ({ value: c, label: c })));
+      });
+  }, []);
+
+  const handleNumberInput = (setter: (n: string) => void) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.replace(/^0+/, '');
+    if (value === '' || /^[1-9][0-9]*$/.test(value)) {
+      setter(value);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -49,7 +40,7 @@ function App() {
       alert("Please select a city.");
       return;
     }
-    if (bedrooms < 1 || bathrooms < 1) {
+    if (!bedrooms || !bathrooms || Number(bedrooms) < 1 || Number(bathrooms) < 1) {
       alert("Bedrooms and bathrooms must be at least 1.");
       return;
     }
@@ -58,7 +49,7 @@ function App() {
     const response = await fetch('http://localhost:8000/api/filter', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ city: city.value, bedrooms, bathrooms })
+      body: JSON.stringify({ city: city.value, bedrooms: Number(bedrooms), bathrooms: Number(bathrooms) })
     });
     const data = await response.json();
     setResults(data.results || []);
@@ -67,10 +58,10 @@ function App() {
 
   return (
     <div className="App">
-      <h1>🏠 Canada House Price Filter</h1>
+      <h1>Canada House Price Filter</h1>
       <form onSubmit={handleSubmit} className="filter-form">
         <label>
-          City:
+          <span><FaCity size={16} /> City:</span>
           <Select
             options={cityOptions}
             value={city}
@@ -82,22 +73,26 @@ function App() {
           />
         </label>
         <label>
-          Bedrooms:
+          <span><FaBed size={16} /> Bedrooms:</span>
           <input
-            type="number"
+            type="text"
+            inputMode="numeric"
+            pattern="[0-9]*"
             min={1}
             value={bedrooms}
-            onChange={e => setBedrooms(Number(e.target.value))}
+            onChange={handleNumberInput(setBedrooms)}
             required
           />
         </label>
         <label>
-          Bathrooms:
+          <span><FaBath size={16} /> Bathrooms:</span>
           <input
-            type="number"
+            type="text"
+            inputMode="numeric"
+            pattern="[0-9]*"
             min={1}
             value={bathrooms}
-            onChange={e => setBathrooms(Number(e.target.value))}
+            onChange={handleNumberInput(setBathrooms)}
             required
           />
         </label>
@@ -112,7 +107,6 @@ function App() {
               <th>Predicted Price</th>
               <th>Number Beds</th>
               <th>Number Baths</th>
-              <th>Address</th>
             </tr>
           </thead>
           <tbody>
@@ -122,7 +116,6 @@ function App() {
                 <td>{row.Predicted_Price}</td>
                 <td>{row.Number_Beds}</td>
                 <td>{row.Number_Baths}</td>
-                <td>{row.Address || '-'}</td>
               </tr>
             ))}
           </tbody>

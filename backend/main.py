@@ -53,4 +53,10 @@ def filter_listings(req: FilterRequest):
             "Number_Baths": req.bathrooms,
             "Predicted_Price": round(predicted_price, 2)
         }]
-    } 
+    }
+
+@app.get("/api/cities")
+def get_cities():
+    df = pd.read_csv(CSV_PATH, encoding='latin1', usecols=['City'])
+    cities = sorted(df['City'].dropna().unique())
+    return {"cities": cities} 
