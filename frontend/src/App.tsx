@@ -101,7 +101,7 @@ function App() {
             required
           />
         </label>
-        <button type="submit" disabled={loading}>{loading ? 'Predicting...' : 'Predict Price'}</button>
+        <button type="submit" disabled={loading}>{loading ? 'Predicting...' : 'Predict'}</button>
       </form>
       <hr />
       {results.length > 0 && (

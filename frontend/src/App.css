@@ -80,6 +80,8 @@ h1 {
   outline: none;
   background: #f9fbfd;
   transition: border 0.2s;
+  width: 160px;
+  box-sizing: border-box;
 }
 .filter-form input[type="text"]:focus,
 .filter-form input[type="number"]:focus {
@@ -97,6 +99,7 @@ button[type="submit"] {
   font-weight: 600;
   box-shadow: 0 1px 4px rgba(25, 118, 210, 0.08);
   transition: background 0.2s;
+  margin-top: 1.7rem;
 }
 button[type="submit"]:hover:not([disabled]) {
   background: var(--primary-dark);
