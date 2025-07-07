@@ -4,22 +4,21 @@ from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error
 
 # Load the dataset
-df = pd.read_csv('housePrices.csv')
+df = pd.read_csv('housePrices.csv', encoding='latin1')
 
-# Drop unwanted columns
-columns_to_drop = ['Address', 'Province', 'Population', 'Latitude', 'Longitude', 'Median_Family_Income']
-df = df.drop(columns=columns_to_drop)
+# Keep only relevant columns
+columns_to_keep = ['City', 'Number_Beds', 'Number_Baths', 'Price']
+df = df[columns_to_keep]
 
-# Display the first few rows
-print('First few rows after dropping columns:')
+print('First few rows of the selected columns:')
 print(df.head())
 
-# Assume the target variable is named 'Price'
+# Features and target
 target_column = 'Price'
 X = df.drop(target_column, axis=1)
 y = df[target_column]
 
-# For non-numeric columns, use one-hot encoding
+# One-hot encode categorical variables (City)
 X = pd.get_dummies(X)
 
 # Split the data
