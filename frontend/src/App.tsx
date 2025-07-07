@@ -56,6 +56,11 @@ function App() {
     setLoading(false);
   };
 
+  const formatPrice = (price?: number) => {
+    if (typeof price !== 'number' || isNaN(price)) return '';
+    return price.toLocaleString('en-US', { maximumFractionDigits: 2 });
+  };
+
   return (
     <div className="App">
       <h1>Canada House Price Filter</h1>
@@ -96,7 +101,7 @@ function App() {
             required
           />
         </label>
-        <button type="submit" disabled={loading}>{loading ? 'Searching...' : 'Filter'}</button>
+        <button type="submit" disabled={loading}>{loading ? 'Predicting...' : 'Predict Price'}</button>
       </form>
       <hr />
       {results.length > 0 && (
@@ -104,18 +109,18 @@ function App() {
           <thead>
             <tr>
               <th>City</th>
-              <th>Predicted Price</th>
               <th>Number Beds</th>
               <th>Number Baths</th>
+              <th>Expected Price</th>
             </tr>
           </thead>
           <tbody>
             {results.map((row, idx) => (
               <tr key={idx}>
                 <td>{row.City}</td>
-                <td>{row.Predicted_Price}</td>
                 <td>{row.Number_Beds}</td>
                 <td>{row.Number_Baths}</td>
+                <td>${formatPrice(row.Predicted_Price)}</td>
               </tr>
             ))}
           </tbody>
