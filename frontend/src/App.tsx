@@ -12,6 +12,7 @@ interface Listing {
   Latitude?: number;
   Longitude?: number;
   Median_Family_Income?: number;
+  Predicted_Price?: number;
 }
 
 function App() {
@@ -59,7 +60,7 @@ function App() {
           <thead>
             <tr>
               <th>City</th>
-              <th>Price</th>
+              <th>Predicted Price</th>
               <th>Number Beds</th>
               <th>Number Baths</th>
               <th>Address</th>
@@ -69,7 +70,7 @@ function App() {
             {results.map((row, idx) => (
               <tr key={idx}>
                 <td>{row.City}</td>
-                <td>{row.Price}</td>
+                <td>{row.Predicted_Price}</td>
                 <td>{row.Number_Beds}</td>
                 <td>{row.Number_Baths}</td>
                 <td>{row.Address || '-'}</td>
