@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Select from 'react-select';
 import './App.css';
 
 interface Listing {
@@ -15,8 +16,28 @@ interface Listing {
   Predicted_Price?: number;
 }
 
+const cityOptions = [
+  { value: "Toronto", label: "Toronto" },
+  { value: "Winnipeg", label: "Winnipeg" },
+  { value: "Vancouver", label: "Vancouver" },
+  { value: "Calgary", label: "Calgary" },
+  { value: "Edmonton", label: "Edmonton" },
+  { value: "Ottawa", label: "Ottawa" },
+  { value: "Montreal", label: "Montreal" },
+  { value: "Halifax", label: "Halifax" },
+  { value: "Victoria", label: "Victoria" },
+  { value: "Saskatoon", label: "Saskatoon" },
+  { value: "Regina", label: "Regina" },
+  { value: "Quebec", label: "Quebec" },
+  { value: "Hamilton", label: "Hamilton" },
+  { value: "London", label: "London" },
+  { value: "Kitchener", label: "Kitchener" },
+  { value: "Windsor", label: "Windsor" },
+  // ...add more cities as needed
+];
+
 function App() {
-  const [city, setCity] = useState('');
+  const [city, setCity] = useState<{ value: string; label: string } | null>(null);
   const [bedrooms, setBedrooms] = useState(1);
   const [bathrooms, setBathrooms] = useState(1);
   const [results, setResults] = useState<Listing[]>([]);
@@ -24,12 +45,20 @@ function App() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!city) {
+      alert("Please select a city.");
+      return;
+    }
+    if (bedrooms < 1 || bathrooms < 1) {
+      alert("Bedrooms and bathrooms must be at least 1.");
+      return;
+    }
     setLoading(true);
     setResults([]);
     const response = await fetch('http://localhost:8000/api/filter', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ city, bedrooms, bathrooms })
+      body: JSON.stringify({ city: city.value, bedrooms, bathrooms })
     });
     const data = await response.json();
     setResults(data.results || []);
@@ -42,15 +71,35 @@ function App() {
       <form onSubmit={handleSubmit} className="filter-form">
         <label>
           City:
-          <input value={city} onChange={e => setCity(e.target.value)} required />
+          <Select
+            options={cityOptions}
+            value={city}
+            onChange={setCity}
+            placeholder="Select a city..."
+            isClearable
+            isSearchable
+            styles={{ container: base => ({ ...base, minWidth: 200 }) }}
+          />
         </label>
         <label>
           Bedrooms:
-          <input type="number" min={1} value={bedrooms} onChange={e => setBedrooms(Number(e.target.value))} required />
+          <input
+            type="number"
+            min={1}
+            value={bedrooms}
+            onChange={e => setBedrooms(Number(e.target.value))}
+            required
+          />
         </label>
         <label>
           Bathrooms:
-          <input type="number" min={1} value={bathrooms} onChange={e => setBathrooms(Number(e.target.value))} required />
+          <input
+            type="number"
+            min={1}
+            value={bathrooms}
+            onChange={e => setBathrooms(Number(e.target.value))}
+            required
+          />
         </label>
         <button type="submit" disabled={loading}>{loading ? 'Searching...' : 'Filter'}</button>
       </form>
