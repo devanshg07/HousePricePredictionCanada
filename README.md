@@ -1,181 +1,146 @@
-# 🏠 Canada House Price Prediction
+# HousePricePredictionCanada
 
-A full-stack web application that predicts house prices across Canadian cities using machine learning. Built with React frontend and FastAPI backend.
+## Overview
 
-## ✨ Features
+HousePricePredictionCanada is a full-stack machine learning project designed to predict house prices in Canadian cities. It leverages a dataset of real estate listings, including features such as city, number of bedrooms, and bathrooms, to train a regression model. The project provides a user-friendly web interface for users to input property details and receive instant price predictions.
 
-- **Smart Price Prediction**: ML-powered house price predictions based on location, bedrooms, and bathrooms
-- **City Selection**: Browse and filter by major Canadian cities
-- **Real-time Results**: Instant price predictions with detailed breakdowns
-- **Responsive Design**: Works seamlessly on desktop and mobile devices
-- **Modern UI**: Clean, intuitive interface with house-themed design
-
-## 🚀 Live Demo
-
-[View the live application here](https://your-app-name.vercel.app)
-
-## 🛠️ Tech Stack
-
-### Frontend
-- **React 18** with TypeScript
-- **React Select** for enhanced dropdowns
-- **React Icons** for beautiful UI elements
-- **CSS3** for styling
-
-### Backend
-- **FastAPI** (Python) for API endpoints
-- **Pandas** for data manipulation
-- **Scikit-learn** for machine learning model
-- **Uvicorn** for ASGI server
-
-### Data
-- **Canadian House Prices Dataset** with real market data
-- **Trained ML Model** for accurate price predictions
-
-## 📁 Project Structure
-
-```
-HousePricePrediction/
-├── frontend/                 # React application
-│   ├── public/              # Static assets
-│   │   └── index.tsx       # Application entry point
-│   ├── package.json        # Frontend dependencies
-│   └── tsconfig.json       # TypeScript configuration
-├── backend/                 # FastAPI server
-│   └── main.py             # API endpoints and ML model
-├── housePrices.csv         # Dataset
-├── train.ipynb             # Model training notebook
-└── README.md               # This file
-```
-
-## 🚀 Quick Start
-
-### Prerequisites
-- **Node.js** (v16 or higher)
-- **Python** (v3.8 or higher)
-- **npm** or **yarn**
-
-### 1. Clone the Repository
-```bash
-git clone https://github.com/yourusername/house-price-prediction.git
-cd house-price-prediction
-```
-
-### 2. Set Up the Backend
-```bash
-# Create and activate virtual environment
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-
-# Install Python dependencies
-pip install fastapi uvicorn pandas scikit-learn
-
-# Start the backend server
-cd backend
-python main.py
-```
-
-The backend will be running at `http://localhost:8000`
-
-### 3. Set Up the Frontend
-```bash
-# Install Node.js dependencies
-cd frontend
-npm install
-
-# Start the development server
-npm start
-```
-
-The frontend will be running at `http://localhost:3000`
-
-### 4. Use the Application
-1. Open your browser and go to `http://localhost:3000`
-2. Select a Canadian city from the dropdown
-3. Enter the number of bedrooms and bathrooms
-4. Click "Predict" to get the estimated house price
-
-## 🌐 Deployment
-
-### Frontend (Vercel)
-1. Push your code to GitHub
-2. Connect your repository to Vercel
-3. Set the **Root Directory** to `frontend`
-4. Deploy with these settings:
-   - **Framework Preset**: React
-   - **Install Command**: `npm install`
-   - **Build Command**: `npm run build`
-   - **Output Directory**: `build`
-
-### Backend (Render/Railway)
-1. Create a new Web Service on Render or Railway
-2. Connect your GitHub repository
-3. Set the **Root Directory** to `backend`
-4. Configure environment variables if needed
-5. Deploy
-
-## 📊 API Endpoints
-
-### GET `/api/cities`
-Returns a list of available Canadian cities.
-
-**Response:**
-```json
-{
-  "cities": ["Toronto", "Vancouver", "Montreal", ...]
-}
-```
-
-### POST `/api/filter`
-Predicts house prices based on input parameters.
-
-**Request Body:**
-```json
-{
-  "city": "Toronto",
-  "bedrooms": 3,
-  "bathrooms": 2
-}
-```
-
-**Response:**
-```json
-{
-  "results": [
-    {
-      "City": "Toronto",
-      "Number_Beds": 3,
-      "Number_Baths": 2,
-      "Predicted_Price": 850000
-    }
-  ]
-}
-```
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-- Canadian real estate data sources
-- React and FastAPI communities
-- Machine learning enthusiasts
-
-## 📞 Support
-
-If you have any questions or need help:
-- Open an issue on GitHub
-- Contact: your-email@example.com
+The project is structured into three main components:
+- **Machine Learning Model (Jupyter Notebook):** For data preprocessing, model training, and exporting the trained model.
+- **Backend API (FastAPI):** Serves predictions using the trained model and provides city data to the frontend.
+- **Frontend (React):** Allows users to interact with the model and view predictions in real time.
 
 ---
 
-**Made with ❤️ for the Canadian housing market** 
+## Features
+
+- Predicts house prices based on city, number of bedrooms, and bathrooms.
+- Interactive web interface for easy user input.
+- FastAPI backend for efficient and scalable API serving.
+- Easily extensible for more features or additional data.
+
+---
+
+## Getting Started
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/yourusername/HousePricePredictionCanada.git
+cd HousePricePredictionCanada
+```
+
+---
+
+### 2. Prepare the Machine Learning Model
+
+The backend requires a trained model (`canada_house_price_prediction_model.pickle`) and a columns file (`columns.json`). If these files are not present, you need to generate them by running the Jupyter notebook.
+
+#### a. Install Python dependencies
+
+It is recommended to use a virtual environment:
+
+```bash
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+pip install -r requirements.txt  # If requirements.txt is not present, install: pandas numpy scikit-learn matplotlib
+```
+
+#### b. Run the Jupyter Notebook
+
+Open `train.ipynb` in Jupyter Notebook or JupyterLab:
+
+```bash
+jupyter notebook train.ipynb
+```
+
+- Follow the notebook cells to preprocess the data and train the model.
+- **Important:** At the end of the notebook, add and run the following code to save the trained model and columns:
+
+```python
+import pickle
+model_filename = 'canada_house_price_prediction_model.pickle'
+with open(model_filename, 'wb') as f:
+    pickle.dump(lr_clf, f)
+
+columns = {'data_columns': list(x.columns)}
+import json
+with open('columns.json', 'w') as f:
+    json.dump(columns, f)
+```
+
+- Ensure `canada_house_price_prediction_model.pickle` and `columns.json` are created in the project root.
+
+---
+
+### 3. Start the Backend API
+
+The backend is built with FastAPI and expects the model and columns files in the project root.
+
+#### a. Install backend dependencies
+
+```bash
+pip install fastapi uvicorn pandas numpy scikit-learn
+```
+
+#### b. Run the backend server
+
+```bash
+cd backend
+uvicorn main:app --reload
+```
+
+The API will be available at `http://localhost:8000`.
+
+---
+
+### 4. Start the Frontend
+
+The frontend is a React app located in the `frontend` directory.
+
+#### a. Install frontend dependencies
+
+```bash
+cd ../frontend
+npm install
+```
+
+#### b. Start the frontend development server
+
+```bash
+npm start
+```
+
+The frontend will be available at `http://localhost:3000` and will proxy API requests to the backend.
+
+---
+
+## Usage
+
+1. Open your browser and go to `http://localhost:3000`.
+2. Select a city, number of bedrooms, and bathrooms.
+3. Click the button to get a predicted house price.
+
+---
+
+## Project Structure
+
+```
+HousePricePredictionCanada/
+  ├── backend/                # FastAPI backend
+  │   └── main.py
+  ├── frontend/               # React frontend
+  │   └── src/
+  ├── housePrices.csv         # Dataset
+  ├── train.ipynb             # Jupyter notebook for ML
+  ├── canada_house_price_prediction_model.pickle  # Trained model (generated)
+  ├── columns.json            # Model columns (generated)
+  └── README.md
+```
+
+---
+
+## License
+
+This project is open source and available under the [MIT License](LICENSE).
+
+--- 
