@@ -2,7 +2,7 @@
 
 ## Overview
 
-HousePricePredictionCanada is a full-stack machine learning project designed to predict house prices in Canadian cities. It leverages a dataset of real estate listings, including features such as city, number of bedrooms, and bathrooms, to train a regression model. The project provides a user-friendly web interface for users to input property details and receive instant price predictions.
+HousePricePredictionCanada is a full-stack machine learning project I built designed to predict house prices in Canadian cities. It leverages a dataset of real estate listings, including features such as city, number of bedrooms, and bathrooms, to train a regression model. The project provides a user-friendly web interface for users to input property details and receive instant price predictions.
 
 The project is structured into three main components:
 - **Machine Learning Model (Jupyter Notebook):** For data preprocessing, model training, and exporting the trained model.
